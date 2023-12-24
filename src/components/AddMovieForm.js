@@ -2,16 +2,19 @@ import React, { useState } from 'react';
 import { addMovie } from './../actions/movieActions';
 
 import { Link, useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 const AddMovieForm = (props) => {
   const { push } = useHistory();
+  const dispatch = useDispatch();
 
   const [movie, setMovie] = useState({
     title: "",
     director: "",
     genre: "",
     metascore: 0,
-    description: ""
+    description: "",
+    id: Date.now()
   });
 
   const handleChange = (e) => {
@@ -19,6 +22,13 @@ const AddMovieForm = (props) => {
       ...movie,
       [e.target.name]: e.target.value
     });
+  }
+
+  const handleAddMovie = (e) => {
+    e.preventDefault();
+    dispatch(addMovie(movie));
+    console.log("Film Eklendi.");
+    push('/movies');
   }
 
   const handleSubmit = (e) => {
@@ -59,7 +69,11 @@ const AddMovieForm = (props) => {
           <Link to={`/movies`} className="myButton bg-zinc-500">
             Vazgeç
           </Link>
-          <button type="submit" className="myButton bg-green-700 hover:bg-green-600">Ekle</button>
+          <button 
+          onClick={handleAddMovie} 
+          type="submit" 
+          className="myButton bg-green-700 hover:bg-green-600"
+          > Ekle</button>
         </div>
       </form>
     </div>
